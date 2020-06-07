@@ -1,4 +1,6 @@
 image: "python:3.7"
+variables:
+  REGISTRY_ID: "$REGISTRY_ID" 
 
 stages:
   - build
@@ -17,6 +19,6 @@ build:
     # - $(aws ecr get-login --no-include-email --region us-east-2 | sed 's|https://||')
   script:
     - chmod a+x ./gitlab-deploy/*.sh #Give execution permisions to all shell files
-    - eval $(aws ecr get-login --no-include-email --region us-east-1 --registry-ids 363709968092)
+    - eval $(aws ecr get-login --no-include-email --region us-east-1 --registry-ids $REGISTRY_ID)
     # - eval $(sudo aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 363709968092.dkr.ecr.us-east-2.amazonaws.com)
     - bash ./gitlab-deploy/.gitlab-build.services.sh
