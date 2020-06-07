@@ -1,0 +1,50 @@
+image: "python:3.7"
+
+variables:
+  APP_NAME: "$APP_NAME" # Put the name of your app here
+  DOCKER_REGISTRY_URL:  "$DOCKER_REGISTRY_URL" # Put in your registry url here
+  VERSION: "$CI_COMMIT_SHORT_SHA" # Put the version of the app here
+
+stages:
+  - build
+  - staging
+
+build:
+  stage: build
+  tags:
+    - misc-services
+  image: docker:latest
+  before_script:
+    - sudo apt-get install -y python3-pip
+    - sudo pip3 install awscli
+    # - sudo whoami
+    # - $(sudo aws ecr get-login --no-include-email --region us-east-2)
+    # - $(aws ecr get-login --no-include-email --region us-east-2 | sed 's|https://||')
+  script:
+    - chmod a+x ./gitlab-deploy/*.sh #Give execution permisions to all shell files
+    - eval $(aws ecr get-login --no-include-email --region us-east-1 --registry-ids 363709968092)
+    # - eval $(sudo aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 363709968092.dkr.ecr.us-east-2.amazonaws.com)
+    - bash ./gitlab-deploy/.gitlab-build.services.sh
+
+Deploy to Staging:
+  stage: staging
+  tags:
+    - misc-services
+  before_script:
+    #- cat ~/.ssh/id_rsa
+    ###### Login to deployment server using SSH #####
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval "$(ssh-agent -s)"
+    - ssh-add ~/.ssh/id_rsa
+    - ssh-keyscan -H $DEPLOYMENT_SERVER_IP >> ~/.ssh/known_hosts
+    - $(aws ecr get-login --no-include-email --region us-east-1)
+    #- cat ~/.ssh/id_rsa
+    #- '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  script:
+    - bash ./gitlab-deploy/.gitlab-deploy.staging.sh
+  environment:
+    name: staging
+    url: http://nerudomregi.me/blogs/heyweather-helm-story
