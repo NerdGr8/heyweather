@@ -14,7 +14,7 @@ I'll be using a Macbook for most of the work. Running a different OS, have a loo
 `sudo brew install helm`
 
 2. Assuming you have an existing application that you would like to add helm. \
-`cd directory-path/ && mkdir helm && cd helm`
+`cd directory-path/ && mkdir helm && cd helm` \
 *This will create a directory helm, I prefer to separate my deployment config from my application source code.* \
 
 3. `helm create <application-name>` \
