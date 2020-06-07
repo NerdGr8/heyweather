@@ -49,4 +49,8 @@ Time to update your chart and reference the docker image.
 [] Enable secrets for config settings to database in app settings.\
 [] Add health check endpoint on .net service.\
 
+## Reference articles
+[Bitnami](https://engineering.bitnami.com/articles/create-a-production-ready-postgresql-cluster-bitnami-kubernetes-and-helm.html)
+[Stolon](https://medium.com/talking-tech-all-around/postgresql-high-availability-on-k8s-the-good-hard-way-554072a2ba8e)
+[Helm docs](https://helm.sh/docs/chart_best_practices/dependencies/)
 
