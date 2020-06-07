@@ -1,4 +1,4 @@
-# A Helm Story, Kubernettes for you and me.
+# A Helm Story, Kubernetes for you and me.
 
 So I'm having to dive into some helm config work. Helm is a Kubernetes dependency management tool. Its primary artifacts, "Charts". They define an application and its dependencies at best. Picture a chart as a bundled deployable resource in a K8s cluster. 
 
